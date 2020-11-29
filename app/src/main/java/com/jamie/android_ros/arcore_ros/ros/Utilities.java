@@ -19,4 +19,12 @@ public class Utilities {
     public static void setHeader(Header h){
         setHeader(h, "android");
     }
+
+    public static double[] makeDiagonal3x3Matrix(double e11, double e22, double e33) {
+        return new double[] {
+                e11, 0, 0,
+                0, e22, 0,
+                0, 0, e33
+        };
+    }
 }

@@ -30,6 +30,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.jamie.android_ros.arcore_ros.ros.converters.ImuMessageConverter;
 
 import org.ros.concurrent.CancellableLoop;
 import org.ros.namespace.GraphName;
@@ -213,7 +214,7 @@ public class SensorPublisher extends AbstractNodeMain implements
 
     @Override
     public void onStart(final ConnectedNode connectedNode) {
-        imuPublisher = new IMUPublisher(connectedNode);
+        imuPublisher = new IMUPublisher(connectedNode, new ImuMessageConverter());
         gpsPublisher = new GPSPublisher(connectedNode);
         odomPublisher = new OdomPublisher(connectedNode);
 
