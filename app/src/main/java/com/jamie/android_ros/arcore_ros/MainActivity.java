@@ -70,9 +70,6 @@ public class MainActivity extends RosActivity implements GLSurfaceView.Renderer 
 
         mPublisher = new SensorPublisher(this, n);
 
-        //register listeners - camera and other sensors
-        mPublisher.registerListeners(this);
-
         n.execute(mPublisher, nodeConfiguration);
     }
 

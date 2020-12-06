@@ -2,6 +2,10 @@ package com.jamie.android_ros.arcore_ros.ros;
 
 import org.ros.message.Time;
 
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import std_msgs.Header;
 
 /**
@@ -26,5 +30,11 @@ public class Utilities {
                 0, e22, 0,
                 0, 0, e33
         };
+    }
+
+    public static <T, R> List<R> map(
+            List<T> transformTarget, Function<T, R> transform
+    ) {
+        return transformTarget.stream().map(transform).collect(Collectors.toList());
     }
 }

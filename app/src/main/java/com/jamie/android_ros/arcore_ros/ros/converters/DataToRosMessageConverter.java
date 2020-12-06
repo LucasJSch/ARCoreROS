@@ -5,5 +5,5 @@ package com.jamie.android_ros.arcore_ros.ros.converters;
  * {@code D} stands from Raw data.
  * */
 public interface DataToRosMessageConverter<M, D> {
-    public M toRosMessage(D rawData, M baseMessage);
+    M toRosMessage(D rawData, M baseMessage);
 }
