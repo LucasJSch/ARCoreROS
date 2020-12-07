@@ -4,8 +4,14 @@ import com.jamie.android_ros.arcore_ros.ros.data_structures.ImuData;
 
 import sensor_msgs.Imu;
 
-import static com.jamie.android_ros.arcore_ros.ros.Utilities.makeDiagonal3x3Matrix;
+import static com.jamie.android_ros.arcore_ros.common.Utilities.makeDiagonal3x3Matrix;
 
+/**
+ * Converts {@code ImuData} objects to {@code Imu} ROS messages.
+ *
+ * @author lorsi96 2020
+ * @since 12-07-2020
+ */
 public class ImuMessageConverter implements DataToRosMessageConverter<Imu, ImuData> {
     private static final double[] LINEAR_ACCELERATION_COVARIANCE = makeDiagonal3x3Matrix(
             2e-4, 3e-4, 3e-4);

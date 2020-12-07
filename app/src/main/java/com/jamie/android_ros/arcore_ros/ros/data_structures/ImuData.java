@@ -1,5 +1,13 @@
 package com.jamie.android_ros.arcore_ros.ros.data_structures;
 
+
+/**
+ * Wraps {@code float[]} data, as received from Android's sensor manager into a single
+ * {@code ImuData} structure.
+ *
+ * @author lorsi96 2020
+ * @since 12-07-2020
+ */
 public class ImuData {
     private float[] linearAcceleration; // x, y, z.
     private float[] angularVelocity; // x, y, z.

@@ -9,16 +9,18 @@ import android.support.annotation.GuardedBy;
 import android.util.Log;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.jamie.android_ros.arcore_ros.ros.data_structures.ImuData;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
-import static com.jamie.android_ros.arcore_ros.ros.Utilities.map;
+import static com.jamie.android_ros.arcore_ros.common.Utilities.map;
 
+/** Sensor that retrieves {@code ImuData} updates.
+ *
+ * @author lorsi96 2020
+ * @since 12-07-2020
+ */
 public class ImuSensor extends BaseSensor<ImuData> {
     private static final short LINEAR_ACCELERATION_RECEIVED = 0b100;
     private static final short ROTATION_RECEIVED = 0b010;

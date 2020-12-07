@@ -30,27 +30,33 @@ import com.google.ar.core.exceptions.UnavailableSdkTooOldException;
 import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException;
 
 /* Helper Imports */
-import com.jamie.android_ros.arcore_ros.ros.GPSPermissionHelper;
+import com.jamie.android_ros.arcore_ros.common.GPSPermissionHelper;
 import com.jamie.android_ros.arcore_ros.arcore.BackgroundRenderer;
-import com.jamie.android_ros.arcore_ros.arcore.CameraPermissionHelper;
+import com.jamie.android_ros.arcore_ros.common.CameraPermissionHelper;
 import com.jamie.android_ros.arcore_ros.arcore.DisplayRotationHelper;
 
 /* ROS Imports */
 import org.ros.android.RosActivity;
 import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMainExecutor;
-import com.jamie.android_ros.arcore_ros.ros.SensorPublisher;
+
+import com.jamie.android_ros.arcore_ros.common.LiveData;
+import com.jamie.android_ros.arcore_ros.ros.PublisherRosNode;
 
 import java.io.IOException;
 
+/**
+ * Main and only activity of the ARCoreROS application.
+ */
 public class MainActivity extends RosActivity implements GLSurfaceView.Renderer {
 
     private final BackgroundRenderer backgroundRenderer = new BackgroundRenderer();
     private DisplayRotationHelper displayRotationHelper;
+    private LiveData<Frame> liveFrame = new LiveData<>();
 
     private boolean mUserRequestedInstall = true;
     private Session mSession = null;
-    SensorPublisher mPublisher = null;
+    PublisherRosNode mPublisher = null;
 
     /* UI Elements */
     private GLSurfaceView surfaceView = null;
@@ -68,8 +74,7 @@ public class MainActivity extends RosActivity implements GLSurfaceView.Renderer 
         NodeConfiguration nodeConfiguration = NodeConfiguration.newPublic(getRosHostname());
         nodeConfiguration.setMasterUri(getMasterUri());
 
-        mPublisher = new SensorPublisher(this, n);
-
+        mPublisher = new PublisherRosNode(this, liveFrame ,n);
         n.execute(mPublisher, nodeConfiguration);
     }
 
@@ -136,50 +141,11 @@ public class MainActivity extends RosActivity implements GLSurfaceView.Renderer 
             // Obtain the current frame from ARSession. When the configuration is set to
             // UpdateMode.BLOCKING (it is by default), this will throttle the rendering to the
             // camera framerate.
-            Frame frame = mSession.update();
-            Camera camera = frame.getCamera();
-
-            // get tracking pose + show
-            if(camera.getTrackingState() == TrackingState.TRACKING){
-
-                Pose pose = camera.getPose();
-                //Log.i("pose", pose.toString());
-
-                if(deviceToPhysical == null) {
-                    // Can be done once after camera permission is granted.
-//                    CameraManager cm = getSystemService(CameraManager.class);
-//                    int sensorOrientation = Arrays.stream(cm.getCameraIdList()).map((id) -> {
-//                        try {
-//                            if (cm.getCameraCharacteristics(id).get(CameraCharacteristics.LENS_FACING) ==
-//                                    CameraMetadata.LENS_FACING_BACK) {
-//                                return cm.getCameraCharacteristics(id).get(CameraCharacteristics.SENSOR_ORIENTATION);
-//                            }
-//                        } catch (CameraAccessException e) {
-//                            throw new RuntimeException(e);
-//                        }
-//                        return -1;
-//                    }).filter((orientation) -> orientation != -1).findFirst().orElse(0);
-//                    deviceToPhysical = Pose.makeInterpolated(
-//                            Pose.IDENTITY,
-//                            Pose.makeRotation(0, 0, -(float) Math.sqrt(0.5), (float) Math.sqrt(0.5)),
-//                            sensorOrientation / 90);
-                    deviceToPhysical = pose.inverse();
-                }
-
-                if(deviceToPhysical != null){
-                    //Pose cameraPose = camera.getPose().compose(deviceToPhysical);
-                    Pose cameraPose = deviceToPhysical.compose(pose);
-                    // Per frame.
-                    this.mPublisher.onOdomChanged(
-                            cameraPose.getTranslation(),
-                            cameraPose.getRotationQuaternion()
-                    );
-                }
-
-            }
+            liveFrame.setValue(mSession.update());
+            Camera camera = liveFrame.getValue().getCamera();
 
             // Draw background.
-            backgroundRenderer.draw(frame);
+            backgroundRenderer.draw(liveFrame.getValue());
 
             // If not tracking, don't draw 3d objects.
             if (camera.getTrackingState() == TrackingState.PAUSED) {
@@ -198,7 +164,7 @@ public class MainActivity extends RosActivity implements GLSurfaceView.Renderer 
             // The first three components are color scaling factors.
             // The last one is the average pixel intensity in gamma space.
             final float[] colorCorrectionRgba = new float[4];
-            frame.getLightEstimate().getColorCorrection(colorCorrectionRgba, 0);
+            liveFrame.getValue().getLightEstimate().getColorCorrection(colorCorrectionRgba, 0);
 
         } catch (Throwable t) {
             // Avoid crashing the application due to unhandled exceptions.
@@ -303,7 +269,6 @@ public class MainActivity extends RosActivity implements GLSurfaceView.Renderer 
                 GPSPermissionHelper.launchPermissionSettings(this);
             }
         }
-
     }
 
     void maybeEnableArButton() {

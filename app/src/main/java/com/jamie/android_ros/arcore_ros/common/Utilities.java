@@ -1,4 +1,4 @@
-package com.jamie.android_ros.arcore_ros.ros;
+package com.jamie.android_ros.arcore_ros.common;
 
 import org.ros.message.Time;
 
@@ -10,12 +10,12 @@ import std_msgs.Header;
 
 /**
  * Created by jamiecho on 2/4/17.
+ * Updated by lorsi96 on 7/12/20.
  */
-
 public class Utilities {
     public static void setHeader(Header h, String frame){
         // utility function to populate the header
-        // timestamp obtained by curret time
+        // timestamp obtained by current time
         // frame-id is all going to be "android"
         h.setStamp(Time.fromMillis(System.currentTimeMillis()));
         h.setFrameId(frame);

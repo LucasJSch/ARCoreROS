@@ -2,9 +2,8 @@ package com.jamie.android_ros.arcore_ros.ros.publishers;
 
 import android.location.Location;
 
-import com.jamie.android_ros.arcore_ros.ros.Utilities;
+import com.jamie.android_ros.arcore_ros.common.Utilities;
 import com.jamie.android_ros.arcore_ros.ros.converters.GpsMessageConverter;
-import com.jamie.android_ros.arcore_ros.ros.sensors.SensorListener;
 
 import org.ros.node.ConnectedNode;
 import org.ros.node.topic.Publisher;
@@ -12,6 +11,11 @@ import org.ros.node.topic.Publisher;
 import sensor_msgs.NavSatFix;
 import sensor_msgs.NavSatStatus;
 
+/**
+ * Publishes {@code NavSatFix} messages based on given {@code Location} updates.
+ * @author lorsi96 2020
+ * @since 12-07-2020
+ */
 public class GpsPublisher implements MessagePublisher<Location> {
 
     private final Publisher<NavSatFix> publisher;
@@ -35,5 +39,10 @@ public class GpsPublisher implements MessagePublisher<Location> {
         msg = converter.toRosMessage(location, msg);
         Utilities.setHeader(msg.getHeader()); // populate header
         publisher.publish(msg);
+    }
+
+    @Override
+    public void onDataReceived(Location data) {
+        publish(data);
     }
 }

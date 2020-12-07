@@ -11,6 +11,11 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
+/** Gps Sensor that retrieves {@code Location} updates
+ *
+ * @author lorsi96 2020
+ * @since 12-07-2020
+ */
 public class GpsSensor extends BaseSensor<Location> {
     private static String TAG = GpsSensor.class.getSimpleName();
 

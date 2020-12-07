@@ -1,4 +1,4 @@
-package com.jamie.android_ros.arcore_ros.ros;
+package com.jamie.android_ros.arcore_ros.common;
 
 import android.Manifest;
 import android.app.Activity;
