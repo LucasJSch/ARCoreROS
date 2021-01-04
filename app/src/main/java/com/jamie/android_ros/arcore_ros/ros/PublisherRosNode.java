@@ -77,6 +77,7 @@ public class PublisherRosNode extends AbstractNodeMain {
         publisherSensors.add(PublisherSensorFactory.createCompressedImageCamera(n, liveFrame));
         publisherSensors.add(PublisherSensorFactory.createDepthImage(n, liveFrame));
         publisherSensors.add(PublisherSensorFactory.createCameraInfo(n, liveFrame));
+        publisherSensors.add(PublisherSensorFactory.createPointcloud(n, liveFrame));
 
         for(PublisherSensor s: publisherSensors) {
             s.startPublishing();

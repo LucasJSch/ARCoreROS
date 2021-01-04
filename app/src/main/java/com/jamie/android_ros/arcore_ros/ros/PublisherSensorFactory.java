@@ -10,12 +10,14 @@ import com.jamie.android_ros.arcore_ros.ros.converters.DepthImageMessageConverte
 import com.jamie.android_ros.arcore_ros.ros.converters.GpsMessageConverter;
 import com.jamie.android_ros.arcore_ros.ros.converters.ImuMessageConverter;
 import com.jamie.android_ros.arcore_ros.ros.converters.OdometryMessageConverter;
+import com.jamie.android_ros.arcore_ros.ros.converters.PointcloudMessageConverter;
 import com.jamie.android_ros.arcore_ros.ros.publishers.CameraInfoPublisher;
 import com.jamie.android_ros.arcore_ros.ros.publishers.CompressedImagePublisher;
 import com.jamie.android_ros.arcore_ros.ros.publishers.DepthImagePublisher;
 import com.jamie.android_ros.arcore_ros.ros.publishers.GpsPublisher;
 import com.jamie.android_ros.arcore_ros.ros.publishers.ImuPublisher;
 import com.jamie.android_ros.arcore_ros.ros.publishers.OdometryPublisher;
+import com.jamie.android_ros.arcore_ros.ros.publishers.PointcloudPublisher;
 import com.jamie.android_ros.arcore_ros.ros.sensors.CameraSensor;
 import com.jamie.android_ros.arcore_ros.ros.sensors.GpsSensor;
 import com.jamie.android_ros.arcore_ros.ros.sensors.ImuSensor;
@@ -65,5 +67,13 @@ public class PublisherSensorFactory {
                 new CameraSensor(liveFrame),
                 new CameraInfoPublisher(node, new CameraInfoMessageConverter(),
                         "android/camera/camera_info"));
+    }
+
+    public static PublisherSensor createPointcloud(ConnectedNode node,
+                                                   LiveData<Frame> liveFrame) {
+        return new PublisherSensor(
+                new CameraSensor(liveFrame),
+                new PointcloudPublisher(node, new PointcloudMessageConverter(),
+                        "android/camera/pointcloud2"));
     }
 }
