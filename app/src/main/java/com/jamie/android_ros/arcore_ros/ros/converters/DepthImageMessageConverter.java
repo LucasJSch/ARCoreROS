@@ -15,6 +15,13 @@ import java.nio.ByteBuffer;
 
 import sensor_msgs.Image;
 
+/**
+ * Converts {@code Frame} objects to {@code Image} ROS messages.
+ * The resulting image message has greyscale depth information.
+ *
+ * @author Lucas Scheinkerman (LucasJSch)
+ * @since 1-04-2021
+ */
 public class DepthImageMessageConverter
         implements DataToRosMessageConverter<Image, Frame> {
 

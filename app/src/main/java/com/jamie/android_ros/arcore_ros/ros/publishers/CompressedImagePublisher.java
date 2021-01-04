@@ -12,6 +12,12 @@ import org.ros.node.topic.Publisher;
 
 import sensor_msgs.CompressedImage;
 
+/**
+ * Publishes {@code CompressedImage} messages based on given {@code Frame} updates.
+ *
+ * @author Lucas Scheinkerman (LucasJSch)
+ * @since 1-04-2021
+ */
 public class CompressedImagePublisher  implements MessagePublisher<Frame> {
     private static final String TAG = CompressedImagePublisher.class.getSimpleName();
     private final Publisher<CompressedImage> publisher;

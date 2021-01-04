@@ -16,6 +16,12 @@ import java.nio.ByteBuffer;
 
 import sensor_msgs.CompressedImage;
 
+/**
+ * Converts {@code Frame} objects to {@code CompressedImage} ROS messages.
+ *
+ * @author Lucas Scheinkerman (LucasJSch)
+ * @since 1-04-2021
+ */
 public class CompressedImageMessageConverter
         implements DataToRosMessageConverter<CompressedImage, Frame> {
 

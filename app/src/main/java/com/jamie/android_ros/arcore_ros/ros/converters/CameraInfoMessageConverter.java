@@ -10,6 +10,12 @@ import org.ros.message.Time;
 
 import sensor_msgs.CameraInfo;
 
+/**
+ * Populates {@code CameraInfo} ROS messages when a new frame arrives.
+ *
+ * @author Lucas Scheinkerman (LucasJSch)
+ * @since 1-04-2021
+ */
 public class CameraInfoMessageConverter implements DataToRosMessageConverter<CameraInfo, Frame> {
 
     private static final String TAG = CameraInfoMessageConverter.class.getSimpleName();

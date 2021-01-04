@@ -11,6 +11,12 @@ import org.ros.node.topic.Publisher;
 
 import sensor_msgs.CameraInfo;
 
+/**
+ * Publishes {@code CameraInfo} messages based on given {@code Frame} updates.
+ *
+ * @author Lucas Scheinkerman (LucasJSch)
+ * @since 1-04-2021
+ */
 public class CameraInfoPublisher implements MessagePublisher<Frame> {
     private static final String TAG = CameraInfoPublisher.class.getSimpleName();
     private final Publisher<CameraInfo> publisher;
