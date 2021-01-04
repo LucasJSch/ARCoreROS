@@ -74,6 +74,7 @@ public class PublisherRosNode extends AbstractNodeMain {
         publisherSensors.add(PublisherSensorFactory.createImu(n, mContext));
         publisherSensors.add(PublisherSensorFactory.createGps(n ,mContext));
         publisherSensors.add(PublisherSensorFactory.createOdom(n, liveFrame));
+        publisherSensors.add(PublisherSensorFactory.createCompressedImageCamera(n, liveFrame));
 
         for(PublisherSensor s: publisherSensors) {
             s.startPublishing();
