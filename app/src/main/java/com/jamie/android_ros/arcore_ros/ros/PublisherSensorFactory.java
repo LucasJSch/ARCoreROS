@@ -4,11 +4,13 @@ import android.content.Context;
 
 import com.google.ar.core.Frame;
 import com.jamie.android_ros.arcore_ros.common.LiveData;
+import com.jamie.android_ros.arcore_ros.ros.converters.CameraInfoMessageConverter;
 import com.jamie.android_ros.arcore_ros.ros.converters.CompressedImageMessageConverter;
 import com.jamie.android_ros.arcore_ros.ros.converters.DepthImageMessageConverter;
 import com.jamie.android_ros.arcore_ros.ros.converters.GpsMessageConverter;
 import com.jamie.android_ros.arcore_ros.ros.converters.ImuMessageConverter;
 import com.jamie.android_ros.arcore_ros.ros.converters.OdometryMessageConverter;
+import com.jamie.android_ros.arcore_ros.ros.publishers.CameraInfoPublisher;
 import com.jamie.android_ros.arcore_ros.ros.publishers.CompressedImagePublisher;
 import com.jamie.android_ros.arcore_ros.ros.publishers.DepthImagePublisher;
 import com.jamie.android_ros.arcore_ros.ros.publishers.GpsPublisher;
@@ -55,5 +57,13 @@ public class PublisherSensorFactory {
                 new CameraSensor(liveFrame),
                 new DepthImagePublisher(node, new DepthImageMessageConverter(),
                         "android/camera/depth_image"));
+    }
+
+    public static PublisherSensor createCameraInfo(ConnectedNode node,
+                                                   LiveData<Frame> liveFrame) {
+        return new PublisherSensor(
+                new CameraSensor(liveFrame),
+                new CameraInfoPublisher(node, new CameraInfoMessageConverter(),
+                        "android/camera/camera_info"));
     }
 }
