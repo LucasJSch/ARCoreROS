@@ -5,14 +5,16 @@ import android.content.Context;
 import com.google.ar.core.Frame;
 import com.jamie.android_ros.arcore_ros.common.LiveData;
 import com.jamie.android_ros.arcore_ros.ros.converters.CompressedImageMessageConverter;
+import com.jamie.android_ros.arcore_ros.ros.converters.DepthImageMessageConverter;
 import com.jamie.android_ros.arcore_ros.ros.converters.GpsMessageConverter;
 import com.jamie.android_ros.arcore_ros.ros.converters.ImuMessageConverter;
 import com.jamie.android_ros.arcore_ros.ros.converters.OdometryMessageConverter;
 import com.jamie.android_ros.arcore_ros.ros.publishers.CompressedImagePublisher;
+import com.jamie.android_ros.arcore_ros.ros.publishers.DepthImagePublisher;
 import com.jamie.android_ros.arcore_ros.ros.publishers.GpsPublisher;
 import com.jamie.android_ros.arcore_ros.ros.publishers.ImuPublisher;
 import com.jamie.android_ros.arcore_ros.ros.publishers.OdometryPublisher;
-import com.jamie.android_ros.arcore_ros.ros.sensors.CompressedImageCameraSensor;
+import com.jamie.android_ros.arcore_ros.ros.sensors.CameraSensor;
 import com.jamie.android_ros.arcore_ros.ros.sensors.GpsSensor;
 import com.jamie.android_ros.arcore_ros.ros.sensors.ImuSensor;
 import com.jamie.android_ros.arcore_ros.ros.sensors.OdometrySensor;
@@ -42,8 +44,16 @@ public class PublisherSensorFactory {
     public static PublisherSensor createCompressedImageCamera(ConnectedNode node,
                                                               LiveData<Frame> liveFrame) {
         return new PublisherSensor(
-                new CompressedImageCameraSensor(liveFrame),
+                new CameraSensor(liveFrame),
                 new CompressedImagePublisher(node, new CompressedImageMessageConverter(),
                                              "android/camera/compressed_image"));
+    }
+
+    public static PublisherSensor createDepthImage(ConnectedNode node,
+                                                              LiveData<Frame> liveFrame) {
+        return new PublisherSensor(
+                new CameraSensor(liveFrame),
+                new DepthImagePublisher(node, new DepthImageMessageConverter(),
+                        "android/camera/depth_image"));
     }
 }

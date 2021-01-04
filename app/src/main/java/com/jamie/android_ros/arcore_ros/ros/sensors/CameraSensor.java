@@ -5,11 +5,11 @@ import com.google.ar.core.Frame;
 import com.google.ar.core.TrackingState;
 import com.jamie.android_ros.arcore_ros.common.LiveData;
 
-public class CompressedImageCameraSensor extends BaseSensor<Frame>  implements LiveData.Observer<Frame> {
+public class CameraSensor extends BaseSensor<Frame>  implements LiveData.Observer<Frame> {
 
     private final LiveData<Frame> liveFrame;
 
-    public CompressedImageCameraSensor(LiveData<Frame> liveFrame) {
+    public CameraSensor(LiveData<Frame> liveFrame) {
         this.liveFrame = liveFrame;
     }
 
