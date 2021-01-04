@@ -20,7 +20,6 @@ import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.Camera;
 import com.google.ar.core.Config;
 import com.google.ar.core.Frame;
-import com.google.ar.core.Pose;
 import com.google.ar.core.Session;
 import com.google.ar.core.TrackingState;
 import com.google.ar.core.exceptions.CameraNotAvailableException;
@@ -52,6 +51,7 @@ import java.io.IOException;
 public class MainActivity extends RosActivity implements GLSurfaceView.Renderer {
 
     private final BackgroundRenderer backgroundRenderer = new BackgroundRenderer();
+    private static final String APP_NOTIFICATION_NAME = "ARCore ROS streamer";
     private DisplayRotationHelper displayRotationHelper;
     private LiveData<Frame> liveFrame = new LiveData<>();
 
@@ -61,13 +61,12 @@ public class MainActivity extends RosActivity implements GLSurfaceView.Renderer 
 
     /* UI Elements */
     private GLSurfaceView surfaceView = null;
-    Button mArButton = null;
-    TextView mPoseView = null;
+    private Button mArButton = null;
+    private TextView mPoseView = null;
 
-    Pose deviceToPhysical = null;
 
     public MainActivity() {
-        super("Odomobile", "Odomobile");
+        super(APP_NOTIFICATION_NAME, APP_NOTIFICATION_NAME);
     }
 
     @Override
@@ -81,7 +80,7 @@ public class MainActivity extends RosActivity implements GLSurfaceView.Renderer 
 
     void initARCore(){
         surfaceView = findViewById(R.id.surfaceView);
-        displayRotationHelper = new DisplayRotationHelper(/*context=*/ this);
+        displayRotationHelper = new DisplayRotationHelper(this);
 
         mArButton = findViewById(R.id.arbutton);
         mPoseView = findViewById(R.id.poseView);
@@ -111,7 +110,7 @@ public class MainActivity extends RosActivity implements GLSurfaceView.Renderer 
         // Prepare the rendering objects. This involves reading shaders, so may throw an IOException.
         try {
             // Create the texture and pass it to ARCore session to be filled during update().
-            backgroundRenderer.createOnGlThread(/*context=*/ this);
+            backgroundRenderer.createOnGlThread(this);
 
         } catch (IOException e) {
             Log.e("Surf", "Failed to read an asset file", e);
@@ -177,7 +176,6 @@ public class MainActivity extends RosActivity implements GLSurfaceView.Renderer 
     protected void onPause(){
         super.onPause();
 
-        // stop ARCore?
         if(mSession != null) {
             displayRotationHelper.onPause();
             surfaceView.onPause();
@@ -208,6 +206,7 @@ public class MainActivity extends RosActivity implements GLSurfaceView.Renderer 
                     case INSTALLED:
                         // Success, create the AR session.
                         mSession = new Session(this);
+                        // Configure the depth images if they're supported.
                         if (mSession.isDepthModeSupported(Config.DepthMode.AUTOMATIC)) {
                             Config config = mSession.getConfig();
                             config.setDepthMode(Config.DepthMode.AUTOMATIC);
@@ -221,7 +220,7 @@ public class MainActivity extends RosActivity implements GLSurfaceView.Renderer 
                         return;
                 }
             }
-        }catch (
+        } catch (
                 UnavailableUserDeclinedInstallationException |
                 UnavailableSdkTooOldException |
                 UnavailableArcoreNotInstalledException |

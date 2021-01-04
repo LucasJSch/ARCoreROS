@@ -1,11 +1,9 @@
 package com.jamie.android_ros.arcore_ros.ros;
 
-import android.os.Message;
 import android.util.Log;
 
 import com.jamie.android_ros.arcore_ros.ros.publishers.MessagePublisher;
 import com.jamie.android_ros.arcore_ros.ros.sensors.Sensor;
-import com.jamie.android_ros.arcore_ros.ros.sensors.SensorListener;
 
 /** Provides an encapsulated instance and simplified interface of a {@code Sensor} and a
  * {@code MessagePublisher} that work together.
