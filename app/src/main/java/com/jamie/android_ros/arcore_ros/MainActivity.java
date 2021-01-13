@@ -18,6 +18,7 @@ import android.widget.Toast;
 /* ARCore Imports */
 import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.Camera;
+import com.google.ar.core.Config;
 import com.google.ar.core.Frame;
 import com.google.ar.core.Pose;
 import com.google.ar.core.Session;
@@ -207,6 +208,11 @@ public class MainActivity extends RosActivity implements GLSurfaceView.Renderer 
                     case INSTALLED:
                         // Success, create the AR session.
                         mSession = new Session(this);
+                        if (mSession.isDepthModeSupported(Config.DepthMode.AUTOMATIC)) {
+                            Config config = mSession.getConfig();
+                            config.setDepthMode(Config.DepthMode.AUTOMATIC);
+                            mSession.configure(config);
+                        }
                         break;
                     case INSTALL_REQUESTED:
                         // Ensures next invocation of requestInstall() will either return

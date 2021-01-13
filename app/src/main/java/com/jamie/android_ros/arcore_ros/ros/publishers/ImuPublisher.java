@@ -25,6 +25,7 @@ public class ImuPublisher implements MessagePublisher<ImuData> {
         this.publisher = connectedNode.newPublisher(topic, sensor_msgs.Imu._TYPE);
         this.msg = publisher.newMessage();
     }
+
     public void publish(ImuData data) {
         Log.v(TAG, "Publishing");
         msg = converter.toRosMessage(data, msg);

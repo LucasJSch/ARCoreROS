@@ -4,12 +4,21 @@ import android.content.Context;
 
 import com.google.ar.core.Frame;
 import com.jamie.android_ros.arcore_ros.common.LiveData;
+import com.jamie.android_ros.arcore_ros.ros.converters.CameraInfoMessageConverter;
+import com.jamie.android_ros.arcore_ros.ros.converters.CompressedImageMessageConverter;
+import com.jamie.android_ros.arcore_ros.ros.converters.DepthImageMessageConverter;
 import com.jamie.android_ros.arcore_ros.ros.converters.GpsMessageConverter;
 import com.jamie.android_ros.arcore_ros.ros.converters.ImuMessageConverter;
 import com.jamie.android_ros.arcore_ros.ros.converters.OdometryMessageConverter;
+import com.jamie.android_ros.arcore_ros.ros.converters.PointcloudMessageConverter;
+import com.jamie.android_ros.arcore_ros.ros.publishers.CameraInfoPublisher;
+import com.jamie.android_ros.arcore_ros.ros.publishers.CompressedImagePublisher;
+import com.jamie.android_ros.arcore_ros.ros.publishers.DepthImagePublisher;
 import com.jamie.android_ros.arcore_ros.ros.publishers.GpsPublisher;
 import com.jamie.android_ros.arcore_ros.ros.publishers.ImuPublisher;
 import com.jamie.android_ros.arcore_ros.ros.publishers.OdometryPublisher;
+import com.jamie.android_ros.arcore_ros.ros.publishers.PointcloudPublisher;
+import com.jamie.android_ros.arcore_ros.ros.sensors.CameraSensor;
 import com.jamie.android_ros.arcore_ros.ros.sensors.GpsSensor;
 import com.jamie.android_ros.arcore_ros.ros.sensors.ImuSensor;
 import com.jamie.android_ros.arcore_ros.ros.sensors.OdometrySensor;
@@ -34,5 +43,37 @@ public class PublisherSensorFactory {
         return new PublisherSensor(
                 new OdometrySensor(liveFrame, null),
                 new OdometryPublisher(node, new OdometryMessageConverter(), "android/odom" ));
+    }
+
+    public static PublisherSensor createCompressedImageCamera(ConnectedNode node,
+                                                              LiveData<Frame> liveFrame) {
+        return new PublisherSensor(
+                new CameraSensor(liveFrame),
+                new CompressedImagePublisher(node, new CompressedImageMessageConverter(),
+                                             "android/camera/compressed_image"));
+    }
+
+    public static PublisherSensor createDepthImage(ConnectedNode node,
+                                                              LiveData<Frame> liveFrame) {
+        return new PublisherSensor(
+                new CameraSensor(liveFrame),
+                new DepthImagePublisher(node, new DepthImageMessageConverter(),
+                        "android/camera/depth_image"));
+    }
+
+    public static PublisherSensor createCameraInfo(ConnectedNode node,
+                                                   LiveData<Frame> liveFrame) {
+        return new PublisherSensor(
+                new CameraSensor(liveFrame),
+                new CameraInfoPublisher(node, new CameraInfoMessageConverter(),
+                        "android/camera/camera_info"));
+    }
+
+    public static PublisherSensor createPointcloud(ConnectedNode node,
+                                                   LiveData<Frame> liveFrame) {
+        return new PublisherSensor(
+                new CameraSensor(liveFrame),
+                new PointcloudPublisher(node, new PointcloudMessageConverter(),
+                        "android/camera/pointcloud2"));
     }
 }
